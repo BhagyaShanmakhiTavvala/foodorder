@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<h1 class="text-center">Admin Dashboard</h1>
+
+<h2>Orders</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Seat Number</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in orders %}
+        <tr>
+            <td>{{ order.id }}</td>
+            <td>{{ order.seat_number }}</td>
+            <td>{{ order.status }}</td>
+            <td>
+                <a href="{% url 'order_details' order.id %}" class="btn btn-info btn-sm">Details</a>
+                <a href="{% url 'update_order_status' order.id %}" class="btn btn-warning btn-sm">Update</a>
+                <a href="{% url 'delete_order' order.id %}" class="btn btn-danger btn-sm">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h2>Food Items</h2>
+<a href="{% url 'add_food_item' %}" class="btn btn-primary mb-3">Add Food Item</a>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Available</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for food in food_items %}
+        <tr>
+            <td>{{ food.name }}</td>
+            <td>{{ food.description }}</td>
+            <td>${{ food.price }}</td>
+            <td>{{ food.available }}</td>
+            <td>
+                <a href="{% url 'update_food_item' food.id %}" class="btn btn-warning btn-sm">Edit</a>
+                <a href="{% url 'delete_food_item' food.id %}" class="btn btn-danger btn-sm">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}Food Menu{% endblock %}
+
+{% block content %}
+<h1 class="text-center">Food Menu</h1>
+<div class="row mt-4">
+    {% for food in foods %}
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            {% if food.image %}
+            <img src="{{ food.image.url }}" class="card-img-top" alt="{{ food.name }}">
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ food.name }}</h5>
+                <p class="card-text">{{ food.description }}</p>
+                <p class="card-text"><strong>${{ food.price }}</strong></p>
+                <span class="badge {% if food.available %}bg-success{% else %}bg-danger{% endif %}">
+                    {{ food.available|yesno:"Available,Unavailable" }}
+                </span>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

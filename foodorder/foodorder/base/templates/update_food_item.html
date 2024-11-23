@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Food Item{% endblock %}
+
+{% block content %}
+<h1 class="text-center">Edit Food Item</h1>
+<form method="post" enctype="multipart/form-data" class="mt-4">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label for="name" class="form-label">Name</label>
+        <input type="text" name="name" value="{{ food_item.name }}" class="form-control" required>
+    </div>
+    <div class="mb-3">
+        <label for="description" class="form-label">Description</label>
+        <textarea name="description" class="form-control" rows="3" required>{{ food_item.description }}</textarea>
+    </div>
+    <div class="mb-3">
+        <label for="price" class="form-label">Price</label>
+        <input type="number" name="price" value="{{ food_item.price }}" class="form-control" step="0.01" required>
+    </div>
+    <div class="mb-3">
+        <label for="image" class="form-label">Image</label>
+        <input type="file" name="image" class="form-control">
+        {% if food_item.image %}
+        <img src="{{ food_item.image.url }}" alt="{{ food_item.name }}" class="img-thumbnail mt-3" width="150">
+        {% endif %}
+    </div>
+    <div class="form-check">
+        <input type="checkbox" name="available" class="form-check-input" id="available" {% if food_item.available %}checked{% endif %}>
+        <label for="available" class="form-check-label">Available</label>
+    </div>
+    <button type="submit" class="btn btn-primary mt-3">Save Changes</button>
+</form>
+<a href="{% url 'food_management' %}" class="btn btn-secondary mt-3">Cancel</a>
+{% endblock %}

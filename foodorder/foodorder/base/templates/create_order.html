@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Order{% endblock %}
+
+{% block content %}
+<h1 class="text-center">Create Order</h1>
+<form method="post" class="mt-4">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label for="seat_number" class="form-label">Seat Number</label>
+        <input type="number" name="seat_number" class="form-control" required>
+    </div>
+    <h2 class="mt-4">Select Food Items</h2>
+    <div class="row">
+        {% for food in foods %}
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                {% if food.image %}
+                <img src="{{ food.image.url }}" class="card-img-top" alt="{{ food.name }}">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ food.name }}</h5>
+                    <p class="card-text">{{ food.description }}</p>
+                    <p class="card-text"><strong>${{ food.price }}</strong></p>
+                    <div class="input-group">
+                        <button type="button" class="btn btn-outline-secondary decrement" data-food-id="{{ food.id }}">-</button>
+                        <input type="number" name="food_{{ food.id }}" class="form-control text-center quantity-input" id="food_{{ food.id }}" value="0" min="0">
+                        <button type="button" class="btn btn-outline-secondary increment" data-food-id="{{ food.id }}">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <button type="submit" class="btn btn-primary mt-3 w-100">Place Order</button>
+</form>
+<a href="{% url 'food_list' %}" class="btn btn-secondary mt-3">Cancel</a>
+
+<script>
+    // JavaScript to handle increment/decrement functionality
+    document.addEventListener("DOMContentLoaded", () => {
+        const incrementButtons = document.querySelectorAll(".increment");
+        const decrementButtons = document.querySelectorAll(".decrement");
+
+        incrementButtons.forEach(button => {
+            button.addEventListener("click", () => {
+                const foodId = button.dataset.foodId;
+                const inputField = document.getElementById(`food_${foodId}`);
+                let currentValue = parseInt(inputField.value) || 0;
+                inputField.value = currentValue + 1;
+            });
+        });
+
+        decrementButtons.forEach(button => {
+            button.addEventListener("click", () => {
+                const foodId = button.dataset.foodId;
+                const inputField = document.getElementById(`food_${foodId}`);
+                let currentValue = parseInt(inputField.value) || 0;
+                if (currentValue > 0) {
+                    inputField.value = currentValue - 1;
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}
